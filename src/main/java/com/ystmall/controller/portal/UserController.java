@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpSession;
 
 /**
- * 用户管理
  * @author yst
  */
 @Controller
@@ -59,6 +58,7 @@ public class UserController {
 
     /**
      * 用户注册
+
      * @return
      */
     @RequestMapping(value = "register.do", method = RequestMethod.POST)
@@ -93,7 +93,7 @@ public class UserController {
             return ServerResponse.createBySuccess(user);
         }
 
-        return ServerResponse.createByErrorMessage("Not Log In");
+        return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户的信息");
     }
 
     /**
@@ -146,7 +146,7 @@ public class UserController {
     public ServerResponse<String> resetPassword(HttpSession session, String passwordOld, String passwordNew){
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorMessage("Not Log In");
+            return ServerResponse.createByErrorMessage("用户未登录");
         }
 
         return iUserService.resetPassword(passwordOld, passwordNew, user);
@@ -163,7 +163,7 @@ public class UserController {
     public ServerResponse<User> update_information(HttpSession session, User user){
         User currentUser = (User)session.getAttribute(Const.CURRENT_USER);
         if(currentUser == null){
-            return ServerResponse.createByErrorMessage("Not Log In");
+            return ServerResponse.createByErrorMessage("用户未登录");
         }
         user.setId(currentUser.getId());
 
@@ -185,7 +185,7 @@ public class UserController {
     public ServerResponse<User> get_information(HttpSession session){
         User currentUser = (User)session.getAttribute(Const.CURRENT_USER);
         if(currentUser == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Not Log In");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，需要强制登录status=10");
         }
 
         return iUserService.getInformation(currentUser.getId());

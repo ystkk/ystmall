@@ -15,10 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
-/**
- * 收货地址管理
- * @author Shengtong Yuan
- */
 @Controller
 @RequestMapping("/shipping/")
 public class ShippingController {
@@ -27,9 +23,7 @@ public class ShippingController {
     @Autowired
     private IShippingService iShippingService;
 
-    /**
-     * 增加收货地址
-     */
+
     @RequestMapping("add.do")
     @ResponseBody
     public ServerResponse add(HttpSession session,Shipping shipping){
@@ -40,9 +34,7 @@ public class ShippingController {
         return iShippingService.add(user.getId(),shipping);
     }
 
-    /**
-     * 删除收货地址
-     */
+
     @RequestMapping("del.do")
     @ResponseBody
     public ServerResponse del(HttpSession session,Integer shippingId){
@@ -53,9 +45,6 @@ public class ShippingController {
         return iShippingService.del(user.getId(),shippingId);
     }
 
-    /**
-     * 更新收货地址
-     */
     @RequestMapping("update.do")
     @ResponseBody
     public ServerResponse update(HttpSession session,Shipping shipping){
@@ -66,9 +55,7 @@ public class ShippingController {
         return iShippingService.update(user.getId(),shipping);
     }
 
-    /**
-     * 选择收货地址
-     */
+
     @RequestMapping("select.do")
     @ResponseBody
     public ServerResponse<Shipping> select(HttpSession session,Integer shippingId){
@@ -79,9 +66,7 @@ public class ShippingController {
         return iShippingService.select(user.getId(),shippingId);
     }
 
-    /**
-     * 获取收货地址列表
-     */
+
     @RequestMapping("list.do")
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
