@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
+/**
+ * 购物车管理
+ * @author Shengtong Yuan
+ */
 @Controller
 @RequestMapping("/cart/")
 public class CartController {
@@ -31,7 +35,6 @@ public class CartController {
         //判断登录权限
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            //未登录
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
         return iCartService.list(user.getId());
@@ -39,7 +42,7 @@ public class CartController {
 
 
     /**
-     * portal 将商品添加到购物车
+     * 将商品添加到购物车
      * @param session
      * @param count
      * @param productId
@@ -58,7 +61,7 @@ public class CartController {
     }
 
     /**
-     * portal 更新购物车
+     * 更新购物车
      * @param session
      * @param count
      * @param productId
@@ -77,7 +80,7 @@ public class CartController {
     }
 
     /**
-     * portal 删除购物车
+     * 删除购物车
      * @param session
      * @param productIds
      * @return

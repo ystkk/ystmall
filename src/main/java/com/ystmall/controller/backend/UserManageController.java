@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
 
+/**
+ * 用户后台管理
+ * @author Shengtong Yuan
+ */
 @Controller
 @RequestMapping("/manage/user")
 public class UserManageController {
@@ -18,6 +22,9 @@ public class UserManageController {
     @Autowired
     private IUserService iUserService;
 
+    /**
+     * 管理员登陆
+     */
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
     public ServerResponse<User> login(String username, String password, HttpSession session){
         ServerResponse<User> response = iUserService.login(username, password);
@@ -28,7 +35,7 @@ public class UserManageController {
                 session.setAttribute(Const.CURRENT_USER, user);
                 return response;
             }else {
-                return ServerResponse.createByErrorMessage("不是管理员，无法登录");
+                return ServerResponse.createByErrorMessage("Not Administrator，Can't Log In");
             }
         }
         return response;

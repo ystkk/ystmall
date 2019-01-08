@@ -22,6 +22,10 @@ import javax.servlet.http.HttpSession;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * 订单管理
+ * @author Shengtong Yuan
+ */
 @Controller
 @RequestMapping("/order/")
 public class OrderController {
@@ -70,17 +74,17 @@ public class OrderController {
             }
             params.put(name,valueStr);
         }
-        logger.info("支付宝回调,sign,trade_status:{},参数:{}",params.get("sign"),params.get("trade_status"),params.toString());
+        logger.info("Alipay Callback,sign,trade_status:{},参数:{}",params.get("sign"),params.get("trade_status"),params.toString());
 
         //***验证回调的正确性 1是支付宝返回的 2避免重复通知
         params.remove("sign_type");
         try {
             boolean alipayRSACheckedV2 = AlipaySignature.rsaCheckV2(params, Configs.getAlipayPublicKey(), "utf-8", Configs.getSignType());
             if(!alipayRSACheckedV2){
-                return ServerResponse.createByErrorMessage("非法请求，验证不通过，请勿再次请求");
+                return ServerResponse.createByErrorMessage("Illegal Request");
             }
         } catch (AlipayApiException e) {
-            logger.error("支付宝验证回调异常",e);
+            logger.error("Alipay Callback Error",e);
             e.printStackTrace();
         }
 

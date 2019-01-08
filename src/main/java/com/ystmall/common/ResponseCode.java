@@ -1,5 +1,9 @@
 package com.ystmall.common;
 
+/**
+ * 响应状态码
+ * @author Shengtong Yuan
+ */
 public enum ResponseCode {
 
     SUCCESS(0,"SUCCESS"),

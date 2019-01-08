@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
+/**
+ * 产品类别后台管理
+ * @author Shengtong Yuan
+ */
 @Controller
 @RequestMapping("/manage/category")
 public class CategoryManageController {
@@ -25,7 +29,7 @@ public class CategoryManageController {
     private ICategoryService iCategoryService;
 
     /**
-     * 增加category
+     * 增加产品category
      * @param session
      * @param categoryName
      * @param parentId
@@ -38,7 +42,7 @@ public class CategoryManageController {
         //判断登录
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Not Logged in, Please Log In");
         }
 
         //检验是否为管理员
@@ -48,7 +52,7 @@ public class CategoryManageController {
             return iCategoryService.addCatagory(categoryName, parentId);
         }else {
             //不是管理员，没有权限
-            return ServerResponse.createByErrorMessage("无权限操作，需要管理员权限");
+            return ServerResponse.createByErrorMessage("Need Administrator Permission");
         }
 
     }
@@ -65,14 +69,14 @@ public class CategoryManageController {
     public ServerResponse setCategoryName(HttpSession session, Integer categoryId, String categoryName){
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Please Log In");
         }
         if(iUserService.checkAdminRole(user).isSuccess()){
             //更新categoryName
             return iCategoryService.updateCategoryName(categoryId,categoryName);
         }else{
             //不是管理员，没有权限
-            return ServerResponse.createByErrorMessage("无权限操作，需要管理员权限");
+            return ServerResponse.createByErrorMessage("Need Administrator Permission");
         }
     }
 
@@ -87,7 +91,7 @@ public class CategoryManageController {
     public ServerResponse getChildrenParallelCategory(HttpSession session, @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId){
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Please Log In");
         }
 
         if(iUserService.checkAdminRole(user).isSuccess()){
@@ -95,7 +99,7 @@ public class CategoryManageController {
             return iCategoryService.getChildrenParallelCategory(categoryId);
         }else{
             //不是管理员，没有权限
-            return ServerResponse.createByErrorMessage("无权限操作，需要管理员权限");
+            return ServerResponse.createByErrorMessage("Need Administrator Permission");
         }
     }
 
@@ -110,7 +114,7 @@ public class CategoryManageController {
     public ServerResponse getCategoryAndDeepChildrenCategory(HttpSession session, @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId){
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Please Log In");
         }
 
         if(iUserService.checkAdminRole(user).isSuccess()){
@@ -119,7 +123,7 @@ public class CategoryManageController {
             return iCategoryService.selectCategoryAndChildrenById(categoryId);
         }else{
             //不是管理员，没有权限
-            return ServerResponse.createByErrorMessage("无权限操作，需要管理员权限");
+            return ServerResponse.createByErrorMessage("Need Administrator Permission");
         }
     }
 }

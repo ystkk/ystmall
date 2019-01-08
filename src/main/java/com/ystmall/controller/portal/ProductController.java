@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * 产品管理
+ * @author Shengtong Yuan
+ */
 @Controller
 @RequestMapping("/product/")
 public class ProductController {
@@ -28,6 +32,7 @@ public class ProductController {
         return iProductService.getProductDetail(productId);
     }
 
+    //获取产品列表
     @RequestMapping("list.do")
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "keyword", required = false) String keyword,

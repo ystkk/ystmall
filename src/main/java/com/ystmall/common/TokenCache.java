@@ -8,8 +8,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * TokenCache 用于重置密码的token验证
+ * @author Shengtong Yuan
+ */
 public class TokenCache {
-
+    
     private static Logger logger= LoggerFactory.getLogger(TokenCache.class);
 
     //声明静态内存块. guava中的本地缓存

@@ -23,6 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
+/**
+ * 产品后台管理
+ * @author Shengtong Yuan
+ */
 @Controller
 @RequestMapping("/manage/product")
 public class ProductManageController {
@@ -37,7 +41,7 @@ public class ProductManageController {
     private IFileService iFileService;
 
     /**
-     * portal保存商品
+     * 保存商品
      * @param session
      * @param product
      * @return
@@ -47,18 +51,18 @@ public class ProductManageController {
     public ServerResponse productSave(HttpSession session, Product product){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Please Log In");
         }
         if(iUserService.checkAdminRole(user).isSuccess()){
             //add product
             return iProductService.saveOrUpdateProduct(product);
         } else{
-            return ServerResponse.createByErrorMessage("无权限操作");
+            return ServerResponse.createByErrorMessage("Need Administrator Permission");
         }
     }
 
     /**
-     * portal修改产品销售状态
+     * 修改产品销售状态
      * @param session
      * @param productId
      * @param status
@@ -69,18 +73,18 @@ public class ProductManageController {
     public ServerResponse setSaleStatus(HttpSession session, Integer productId, Integer status){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Please Log In");
         }
         if(iUserService.checkAdminRole(user).isSuccess()){
             return iProductService.setSaleStatus(productId, status);
         } else{
-            return ServerResponse.createByErrorMessage("无权限操作");
+            return ServerResponse.createByErrorMessage("Need Administrator Permission");
         }
 
     }
 
     /**
-     * portal获取产品详情
+     * 获取产品详情
      * @param session
      * @param productId
      * @return
@@ -90,19 +94,19 @@ public class ProductManageController {
     public ServerResponse getDetail(HttpSession session, Integer productId){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Please Log In");
         }
         if(iUserService.checkAdminRole(user).isSuccess()){
             //返回产品详情
             return iProductService.manageProductDetail(productId);
         } else{
-            return ServerResponse.createByErrorMessage("无权限操作");
+            return ServerResponse.createByErrorMessage("Need Administrator Permission");
         }
 
     }
 
     /**
-     * backend查询产品列表
+     * 查询产品列表
      * @param session
      * @param pageNum
      * @param pageSize
@@ -110,21 +114,23 @@ public class ProductManageController {
      */
     @RequestMapping("list.do")
     @ResponseBody
-    public ServerResponse getList(HttpSession session, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10")int pageSize){
+    public ServerResponse getList(HttpSession session, 
+                                  @RequestParam(value = "pageNum", defaultValue = "1") int pageNum, 
+                                  @RequestParam(value = "pageSize", defaultValue = "10")int pageSize){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Please Log In");
         }
         if(iUserService.checkAdminRole(user).isSuccess()){
             return iProductService.getProductList(pageNum,pageSize);
         } else{
-            return ServerResponse.createByErrorMessage("无权限操作");
+            return ServerResponse.createByErrorMessage("Need Administrator Permission");
         }
 
     }
 
     /**
-     * backend 搜索产品
+     * 搜索产品
      * @param session
      * @param productName
      * @param productId
@@ -134,21 +140,23 @@ public class ProductManageController {
      */
     @RequestMapping("search.do")
     @ResponseBody
-    public ServerResponse productSearch(HttpSession session, String productName, Integer productId, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10")int pageSize){
+    public ServerResponse productSearch(HttpSession session, String productName, Integer productId, 
+                                        @RequestParam(value = "pageNum", defaultValue = "1") int pageNum, 
+                                        @RequestParam(value = "pageSize", defaultValue = "10")int pageSize){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Please Log In");
         }
         if(iUserService.checkAdminRole(user).isSuccess()){
             return iProductService.searchProduct(productName, productId, pageNum, pageSize);
         } else{
-            return ServerResponse.createByErrorMessage("无权限操作");
+            return ServerResponse.createByErrorMessage("Need Administrator Permission");
         }
 
     }
 
     /**
-     * backend 文件上传
+     * 文件上传
      * @param file
      * @param request
      * @return
@@ -156,10 +164,12 @@ public class ProductManageController {
     @RequestMapping("upload.do")
     @ResponseBody
     //HttpServletRequest request动态的创建一个相对路径
-    public ServerResponse upload(HttpSession session,@RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request){
+    public ServerResponse upload(HttpSession session,
+                                @RequestParam(value = "upload_file", required = false) MultipartFile file, 
+                                HttpServletRequest request){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Please Log In");
         }
         if(iUserService.checkAdminRole(user).isSuccess()){
             //从request的session中拿到上下文，上传到upload文件夹
@@ -173,7 +183,7 @@ public class ProductManageController {
 
             return ServerResponse.createBySuccess(fileMap);
         } else{
-            return ServerResponse.createByErrorMessage("无权限操作");
+            return ServerResponse.createByErrorMessage("Need Administrator Permission");
         }
 
     }
@@ -188,12 +198,14 @@ public class ProductManageController {
     @RequestMapping("richtext_img_upload.do")
     @ResponseBody
     //HttpServletRequest request动态的创建一个相对路径
-    public Map richtextImgUpload(HttpSession session, @RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request, HttpServletResponse response){
+    public Map richtextImgUpload(HttpSession session, 
+                                @RequestParam(value = "upload_file", required = false) MultipartFile file, 
+                                HttpServletRequest request, HttpServletResponse response){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         Map resultMap = Maps.newHashMap();
         if(user == null){
             resultMap.put("success",false);
-            resultMap.put("msg","请登录管理员");
+            resultMap.put("msg","Please Log In");
             return resultMap;
         }
         //富文本中对于返回值有自己的要求，使用simditor所以按照simditor要求返回
@@ -208,12 +220,12 @@ public class ProductManageController {
             String targetFileName = iFileService.upload(file,path);
             if(StringUtils.isBlank(targetFileName)){
                 resultMap.put("success",false);
-                resultMap.put("msg","上传失败");
+                resultMap.put("msg","upload fail");
                 return resultMap;
             }
             String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
             resultMap.put("success",true);
-            resultMap.put("msg", "上传成功");
+            resultMap.put("msg", "upload success");
             resultMap.put("file_path",url);
 
             response.addHeader("Access-Control-Allow-Headers", "X-File-Name");
@@ -222,7 +234,7 @@ public class ProductManageController {
 
         } else{
             resultMap.put("success",false);
-            resultMap.put("msg","无权限操作");
+            resultMap.put("msg","Need Administrator Permission");
             return resultMap;
         }
 
