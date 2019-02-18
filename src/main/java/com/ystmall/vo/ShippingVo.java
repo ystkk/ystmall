@@ -1,8 +1,6 @@
 package com.ystmall.vo;
 
-/**
- * Created by geely
- */
+
 public class ShippingVo {
     private String receiverName;
 

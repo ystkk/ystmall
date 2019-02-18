@@ -231,4 +231,23 @@
     from ystmall_order
     ORDER BY  create_time desc
   </select>
+
+  <select id="selectOrderStatusByCreateTime" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List" />
+    from ystmall_order
+    where status = #{status}
+    <![CDATA[
+    and create_time <= #{date}
+    ]]>
+    order by create_time desc
+  </select>
+
+  <update id="closeOrderByOrderId" parameterType="int" >
+    update
+    ystmall_order
+    set status = 0
+    where id = #{id}
+  </update>
+
 </mapper>

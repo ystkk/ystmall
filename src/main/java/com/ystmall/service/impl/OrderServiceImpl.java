@@ -10,7 +10,6 @@ import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
 import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.utils.ZxingUtils;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
@@ -40,6 +39,7 @@ import com.ystmall.vo.OrderVo;
 import com.ystmall.vo.ShippingVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +48,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 
 @Service("iOrderService")
@@ -77,14 +73,19 @@ public class OrderServiceImpl implements IOrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
     @Autowired
     private OrderItemMapper orderItemMapper;
+
     @Autowired
     private PayInfoMapper payInfoMapper;
+
     @Autowired
     private CartMapper cartMapper;
+
     @Autowired
     private ProductMapper productMapper;
+
     @Autowired
     private ShippingMapper shippingMapper;
 
@@ -692,6 +693,33 @@ public class OrderServiceImpl implements IOrderService {
             }
         }
         return ServerResponse.createByErrorMessage("订单不存在");
+    }
+
+    /**
+     * v2.0 定时关单
+     * @param hour
+     */
+    public void closeOrder(int hour){
+
+        Date closeDateTime = DateUtils.addHours(new Date(), -hour);
+        List<Order> orderList = orderMapper.selectOrderStatusByCreateTime(Const.OrderStatusEnum.NO_PAY.getCode(), DateTimeUtil.dateToStr(closeDateTime));
+
+        for(Order order : orderList){
+            List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo());
+            for(OrderItem orderItem : orderItemList){
+                //使用for update悲观锁，一定要用主键来做where条件，防止锁表，同时必须支持MySql的InnoDB。
+                Integer stock = productMapper.selectStockByProductId(orderItem.getProductId());
+                //考虑到已生成的订单里的商品被删除的情况
+                if(stock == null){ continue;}
+                //更新产品库存
+                Product product = new Product();
+                product.setId(orderItem.getProductId());
+                product.setStock(stock + orderItem.getQuantity());
+                productMapper.updateByPrimaryKeySelective(product);
+            }
+            orderMapper.closeOrderByOrderId(order.getId());
+            logger.info("关闭订单OrderNo:{}",order.getOrderNo());
+        }
     }
 
 }

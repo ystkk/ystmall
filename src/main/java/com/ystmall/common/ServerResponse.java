@@ -5,13 +5,12 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
 
-//响应对象
-//<T>代表响应里要封装的数据对象是什么类型
-//实现序列化接口
-//T data代表将要使用泛型的数据对象，为了通用，在返回的时候可以指定泛型里面的内容，也可以不指定
-
-//当调用没有data的方法时候，序列化之后，msg和data就都没有了
-//保证序列化json的时候，如果是null的对象，key也会消失
+/**
+ * 可复用响应
+ * 保证序列化json的时候，如果是null的对象，key也会消失
+ * @author Shengtong Yuan
+ * @param <T>
+ */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ServerResponse<T> implements Serializable {
 

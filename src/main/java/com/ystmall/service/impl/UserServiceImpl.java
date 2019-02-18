@@ -2,11 +2,11 @@ package com.ystmall.service.impl;
 
 import com.ystmall.common.Const;
 import com.ystmall.common.ServerResponse;
-import com.ystmall.common.TokenCache;
 import com.ystmall.dao.UserMapper;
 import com.ystmall.pojo.User;
 import com.ystmall.service.IUserService;
 import com.ystmall.util.MD5Util;
+import com.ystmall.util.RedisShardedPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,7 +117,7 @@ public class UserServiceImpl implements IUserService {
         if(resultCount > 0){
             //问题及问题答案是这个用户的，并且是正确的
             String forgetToken = UUID.randomUUID().toString();
-            TokenCache.setKey(Const.TOKEN_PREFIX + username, forgetToken);
+            RedisShardedPoolUtil.setEx(Const.TOKEN_PREFIX + username, 60*60*12, forgetToken);
             return ServerResponse.createBySuccess(forgetToken);
         }
         return ServerResponse.createByErrorMessage("问题的答案错误");
@@ -138,8 +138,8 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("用户不存在");
         }
 
-        //从cache中获取token
-        String token = TokenCache.getKey(Const.TOKEN_PREFIX + username);
+        //从Redis中获取token
+        String token = RedisShardedPoolUtil.get(Const.TOKEN_PREFIX + username);
         //校验cache中的token
         if(StringUtils.isBlank(token)){
             return ServerResponse.createByErrorMessage("token无效或过期");

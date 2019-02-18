@@ -6,9 +6,7 @@ import com.ystmall.vo.OrderVo;
 
 import java.util.Map;
 
-/**
- * Created by geely
- */
+
 public interface IOrderService {
     ServerResponse pay(Long orderNo, Integer userId, String path);
     ServerResponse aliCallback(Map<String,String> params);
@@ -27,5 +25,7 @@ public interface IOrderService {
     ServerResponse<PageInfo> manageSearch(Long orderNo,int pageNum,int pageSize);
     ServerResponse<String> manageSendGoods(Long orderNo);
 
-
+    //定时关单
+    //hour个小时以内未付款的订单关闭
+    void closeOrder(int hour);
 }
