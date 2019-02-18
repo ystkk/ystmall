@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <property name="LOG_HOME" value="${CATALINA_HOME}/logs"></property>
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoding>UTF-8</encoding>
         <encoder>
@@ -11,9 +12,9 @@
     </appender>
 
     <appender name="ystmall" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>/Users/yst/Code/base/apache-tomcat-8.5.35/logs/mmall.log</File>
+        <File>${LOG_HOME}/ystmall.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/Users/yst/Code/base/apache-tomcat-8.5.35/logs/ystmall.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/ystmall.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <append>true</append>
             <maxHistory>10</maxHistory>
         </rollingPolicy>
@@ -24,7 +25,7 @@
 
 
     <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>/Users/yst/Code/base/apache-tomcat-8.5.35/logs/error.log</File>
+        <File>${LOG_HOME}/error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>/Users/yst/Code/base/apache-tomcat-8.5.35/logs/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <append>true</append>
@@ -43,6 +44,7 @@
     <logger name="com.ystmall" additivity="false" level="INFO" >
         <appender-ref ref="ystmall" />
         <appender-ref ref="console"/>
+        <appender-ref ref="error" />
     </logger>
 
 

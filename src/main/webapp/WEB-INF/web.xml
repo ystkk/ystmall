@@ -24,24 +24,24 @@
     </filter-mapping>
 
     <!-- v2.0 session时间过滤器 -->
-    <!--<filter>-->
-        <!--<filter-name>sessionExpireFilter</filter-name>-->
-        <!--<filter-class>com.ystmall.controller.common.SessionExpireFilter</filter-class>-->
-    <!--</filter>-->
-    <!--<filter-mapping>-->
-        <!--<filter-name>sessionExpireFilter</filter-name>-->
-        <!--<url-pattern>*.do</url-pattern>-->
-    <!--</filter-mapping>-->
-
-    <!-- v2.0 spring session -->
     <filter>
-        <filter-name>springSessionRepositoryFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <filter-name>sessionExpireFilter</filter-name>
+        <filter-class>com.ystmall.controller.common.SessionExpireFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>springSessionRepositoryFilter</filter-name>
+        <filter-name>sessionExpireFilter</filter-name>
         <url-pattern>*.do</url-pattern>
     </filter-mapping>
+
+    <!-- v2.0 spring session -->
+    <!--<filter>-->
+        <!--<filter-name>springSessionRepositoryFilter</filter-name>-->
+        <!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>springSessionRepositoryFilter</filter-name>-->
+        <!--<url-pattern>*.do</url-pattern>-->
+    <!--</filter-mapping>-->
     
 
     <listener>

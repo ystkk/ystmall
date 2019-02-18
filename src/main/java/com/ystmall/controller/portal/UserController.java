@@ -57,7 +57,7 @@ public class UserController {
      * @param httpServletResponse
      * @return
      */
-    @RequestMapping(value = "logout.do", method = RequestMethod.GET)
+    @RequestMapping(value = "logout.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse){
         //v2.0
